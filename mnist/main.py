@@ -15,8 +15,8 @@ from sparsemax import MultiLabelSparseMaxLoss
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-parser.add_argument('--batch-size', type=int, default=64, metavar='N',
-                    help='input batch size for training (default: 64)')
+parser.add_argument('--batch-size', type=int, default=16, metavar='N',
+                    help='input batch size for training (default: 16)')
 parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                     help='input batch size for testing (default: 1000)')
 parser.add_argument('--epochs', type=int, default=10, metavar='N',
@@ -94,12 +94,13 @@ if args.cuda:
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 code_target_class = np.zeros((N_class,H_clusters*H_neurons_per_cluster), dtype='float32')
 
-for i in xrange(N_class):
+for i in range(0, N_class):
     one_hot_vector = np.zeros(H_clusters*H_neurons_per_cluster)
 	#code_target_class[i] = generateRandomCliqueVector(H_clusters,H_neurons_per_cluster).reshape((H_clusters*H_neurons_per_cluster))
     one_hot_vector[i] = 1.0
     code_target_class[i]=one_hot_vector
 
+#transfer a single label problem to a multi-label learning problem
 table_embedding = nn.Embedding(N_class, H_clusters*H_neurons_per_cluster, sparse=True).cuda()
 table_embedding.volatile=True
 table_embedding.requires_grad=False
